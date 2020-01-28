@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+<div>
+  <head>
+    <title>
+      Ranked Basketball
+    </title>
+  </head>
+</div>
+
+{% block content %}
+
+{% for ranking in rankings %}
+<meta http-equiv="refresh" content="5">
+<div style="display: flex;width:100px;text-align:center;border-collapse: collapse;margin-left: auto;margin-right: auto; margin-top: auto ">
+  <p style="border: 1px solid black; padding: 10px;"">
+    {{ranking['rank']}}
+  </p>
+  <p style="margin-left: 0px;border:1px solid black; padding: 10px;border-left:0;">
+    {{ranking['name']}}
+  </p>
+</div>
+{% endfor %}
+
+{% endblock %}
+

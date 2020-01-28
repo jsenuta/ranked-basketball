@@ -1,1 +1,1 @@
-# rankedbasketball
+# ranked-basketball
