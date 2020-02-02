@@ -1,17 +1,13 @@
 import math 
 import json
 import requests
-#import pdb; pdb.set_trace()
 headers = {
     'Authorization': 'Bearer -',
     'Content-Type': 'application/json',
 }
 
-#pip install airtable-python-wrapper
-
 # Function to calculate the Probability 
 def Probability(rating1, rating2): 
-  
     return 1.0 * 1.0 / (1 + 1.0 * math.pow(10, 1.0 * (rating1 - rating2) / 400)) 
   
   
@@ -109,94 +105,108 @@ def SpreadFinder(Pa, Pb):
 
 # Ra and Rb are current ELO ratings 
 
-#pull request for r1 - r10 as well as final score margin (difference in final scores)
-items = json.loads(requests.get('https://api.airtable.com/v0/appsdIexEprfXeowP/Ranks?maxRecords=10&view=Grid%20view', headers=headers).text)
+def updateData(r, headers, data):
+  data = '{  "fields": {    "Name": "p1",    "Rank": "'+str(int(r[0]))+'",     "League": "Gold"  }}' # how to use a variable instead of a number in this?
 
-lst = []
+  response = requests.patch('https://api.airtable.com/v0/appsdIexEprfXeowP/Ranks/recP0Ug7CltqlaONR', headers=headers, data=data)
+
+  data = '{  "fields": {    "Name": "p2",    "Rank": "'+str(int(r[1]))+'",     "League": "Silver"  }}' # how to use a variable instead of a number in this?
+
+  response = requests.patch('https://api.airtable.com/v0/appsdIexEprfXeowP/Ranks/recZ6QZ7Mp3AjYU83', headers=headers, data=data)
+
+  data = '{  "fields": {    "Name": "p3",    "Rank": "'+str(int(r[2]))+'",     "League": "Silver"  }}' # how to use a variable instead of a number in this?
+
+  response = requests.patch('https://api.airtable.com/v0/appsdIexEprfXeowP/Ranks/recWdoxMgJOpL3vXq', headers=headers, data=data)
+
+  data = '{  "fields": {    "Name": "p4",    "Rank": "'+str(int(r[3]))+'",     "League": "Silver"  }}' # how to use a variable instead of a number in this?
+
+  response = requests.patch('https://api.airtable.com/v0/appsdIexEprfXeowP/Ranks/recjFJxsdctwgxwir', headers=headers, data=data)
+
+  data = '{  "fields": {    "Name": "p5",    "Rank": "'+str(int(r[4]))+'",     "League": "Silver"  }}' # how to use a variable instead of a number in this?
+
+  response = requests.patch('https://api.airtable.com/v0/appsdIexEprfXeowP/Ranks/rec2e413CzY4xw3vw', headers=headers, data=data)
+
+  data = '{  "fields": {    "Name": "p6",    "Rank": "'+str(int(r[5]))+'",     "League": "Silver"  }}' # how to use a variable instead of a number in this?
+
+  response = requests.patch('https://api.airtable.com/v0/appsdIexEprfXeowP/Ranks/rec7IhazJHbxGpYJl', headers=headers, data=data)
+
+  data = '{  "fields": {    "Name": "p7",    "Rank": "'+str(int(r[6]))+'",     "League": "Silver"  }}' # how to use a variable instead of a number in this?
+
+  response = requests.patch('https://api.airtable.com/v0/appsdIexEprfXeowP/Ranks/recbrE7TS6zczLO20', headers=headers, data=data)
+
+  data = '{  "fields": {    "Name": "p8",    "Rank": "'+str(int(r[7]))+'",     "League": "Silver"  }}' # how to use a variable instead of a number in this?
+
+  response = requests.patch('https://api.airtable.com/v0/appsdIexEprfXeowP/Ranks/rec0XUKNGhIJeragY', headers=headers, data=data)
+
+  data = '{  "fields": {    "Name": "p9",    "Rank": "'+str(int(r[8]))+'",     "League": "Silver"  }}' # how to use a variable instead of a number in this?
+
+  response = requests.patch('https://api.airtable.com/v0/appsdIexEprfXeowP/Ranks/recdNvUQWkLmgP5Nm', headers=headers, data=data)
+
+  data = '{  "fields": {    "Name": "p10",    "Rank": "'+str(int(r[9]))+'",     "League": "Silver"  }}' # how to use a variable instead of a number in this?
+
+  response = requests.patch('https://api.airtable.com/v0/appsdIexEprfXeowP/Ranks/recaY6psMCOtDincQ', headers=headers, data=data)
+
+# Main func
+def main():
+  items = json.loads(requests.get('https://api.airtable.com/v0/appsdIexEprfXeowP/Ranks?maxRecords=10&view=Grid%20view', headers=headers).text)
+
+  lst = []
   
+  for item in items['records']:
+    lst.append({'rank': item['fields']['Rank'], 'name': item['fields']['Name']})
 
-for item in items['records']:
-  lst.append({'rank': item['fields']['Rank'], 'name': item['fields']['Name']})
+  #print("Enter the ratings of each of the players. Team A: ")
+  i = 0
+  r = []
+  for i in range(len(lst)):
+    r.append(int(lst[i]['rank']))
 
+  print("Old Ratings:")
+  print("Team A below:     Team B below: ")   
+  print("P1 =", str(r[0]), " P6 =", str(r[5]))
+  print("P2 =", str(r[1])," P7 =", str(r[6]))
+  print("P3 =", str(r[2])," P8 =", str(r[7]))
+  print("P4 =", str(r[3])," P9 =", str(r[8]))
+  print("P5 =", str(r[4])," P10 =", str(r[9])) 
 
-#print("Enter the ratings of each of the players. Team A: ")
-i = 0
-r = []
-for i in range(len(lst)):
-#
-  r.append(int(lst[i]['rank']))
+  # Finding the a or b winning team and margin of victory
+  datas = json.loads(requests.get('https://api.airtable.com/v0/appsNudrABvFaxxaK/Table%201?maxRecords=3&view=Grid%20view', headers=headers).text)
+  lst1 = []
 
+  for data in datas['records']:
+    lst1.append({'winner': data['fields']['Winner'], 'margin': data['fields']['Margin']})
 
-
-winner = input("Who won? Team a or b? ")
-if (winner == "a"):
+  # Uses the winner table cell
+  winner = str(lst1[0]['winner'])
+  if (winner == "a"):
     aWin = 1
-else:
+  else:
     aWin = 0
-margin = int(input("What was the margin of Victory? "))
+  margin = int(lst1[0]['margin'])
 
-Ra = Average(r[0], r[1], r[2], r[3], r[4])
-Rb = Average(r[5], r[6], r[7], r[8], r[9])
-diff = round(EloRating(Ra, Rb, aWin, margin))
-#print(diff)
-#print(Ra)
-#print(Rb)
+  # Average ratings of each team, a/b - also finds difference in the ratings
+  Ra = Average(r[0], r[1], r[2], r[3], r[4])
+  Rb = Average(r[5], r[6], r[7], r[8], r[9])
+  diff = round(EloRating(Ra, Rb, aWin, margin))
 
-r[0] += diff
-r[1] += diff
-r[2] += diff
-r[3] += diff
-r[4] += diff
-r[5] -= diff
-r[6] -= diff
-r[7] -= diff
-r[8] -= diff
-r[9] -= diff
+  # New ratings
+  r[0] += diff
+  r[1] += diff
+  r[2] += diff
+  r[3] += diff
+  r[4] += diff
+  r[5] -= diff
+  r[6] -= diff
+  r[7] -= diff
+  r[8] -= diff
+  r[9] -= diff
 
-print("Updated Ratings:")
-print("Team A below:     Team B below: ")   
-print("P1 =", str(r[0]), " P6 =", str(r[5]))
-print("P2 =", str(r[1])," P7 =", str(r[6]))
-print("P3 =", str(r[2])," P8 =", str(r[7]))
-print("P4 =", str(r[3])," P9 =", str(r[8]))
-print("P5 =", str(r[4])," P10 =", str(r[9])) 
+  print("Updated Ratings:")
+  print("Team A below:     Team B below: ")   
+  print("P1 =", str(r[0]), " P6 =", str(r[5]))
+  print("P2 =", str(r[1])," P7 =", str(r[6]))
+  print("P3 =", str(r[2])," P8 =", str(r[7]))
+  print("P4 =", str(r[3])," P9 =", str(r[8]))
+  print("P5 =", str(r[4])," P10 =", str(r[9])) 
 
-data = '{  "fields": {    "Name": "p1",    "Rank": "'+str(int(r[0]))+'",     "League": "Gold"  }}' # how to use a variable instead of a number in this?
-
-response = requests.patch('https://api.airtable.com/v0/appsdIexEprfXeowP/Ranks/recP0Ug7CltqlaONR', headers=headers, data=data)
-
-data = '{  "fields": {    "Name": "p2",    "Rank": "'+str(int(r[1]))+'",     "League": "Silver"  }}' # how to use a variable instead of a number in this?
-
-response = requests.patch('https://api.airtable.com/v0/appsdIexEprfXeowP/Ranks/recZ6QZ7Mp3AjYU83', headers=headers, data=data)
-
-data = '{  "fields": {    "Name": "p3",    "Rank": "'+str(int(r[2]))+'",     "League": "Silver"  }}' # how to use a variable instead of a number in this?
-
-response = requests.patch('https://api.airtable.com/v0/appsdIexEprfXeowP/Ranks/recWdoxMgJOpL3vXq', headers=headers, data=data)
-
-data = '{  "fields": {    "Name": "p4",    "Rank": "'+str(int(r[3]))+'",     "League": "Silver"  }}' # how to use a variable instead of a number in this?
-
-response = requests.patch('https://api.airtable.com/v0/appsdIexEprfXeowP/Ranks/recjFJxsdctwgxwir', headers=headers, data=data)
-
-data = '{  "fields": {    "Name": "p5",    "Rank": "'+str(int(r[4]))+'",     "League": "Silver"  }}' # how to use a variable instead of a number in this?
-
-response = requests.patch('https://api.airtable.com/v0/appsdIexEprfXeowP/Ranks/rec2e413CzY4xw3vw', headers=headers, data=data)
-
-data = '{  "fields": {    "Name": "p6",    "Rank": "'+str(int(r[5]))+'",     "League": "Silver"  }}' # how to use a variable instead of a number in this?
-
-response = requests.patch('https://api.airtable.com/v0/appsdIexEprfXeowP/Ranks/rec7IhazJHbxGpYJl', headers=headers, data=data)
-
-data = '{  "fields": {    "Name": "p7",    "Rank": "'+str(int(r[6]))+'",     "League": "Silver"  }}' # how to use a variable instead of a number in this?
-
-response = requests.patch('https://api.airtable.com/v0/appsdIexEprfXeowP/Ranks/recbrE7TS6zczLO20', headers=headers, data=data)
-
-data = '{  "fields": {    "Name": "p8",    "Rank": "'+str(int(r[7]))+'",     "League": "Silver"  }}' # how to use a variable instead of a number in this?
-
-response = requests.patch('https://api.airtable.com/v0/appsdIexEprfXeowP/Ranks/rec0XUKNGhIJeragY', headers=headers, data=data)
-
-data = '{  "fields": {    "Name": "p9",    "Rank": "'+str(int(r[8]))+'",     "League": "Silver"  }}' # how to use a variable instead of a number in this?
-
-response = requests.patch('https://api.airtable.com/v0/appsdIexEprfXeowP/Ranks/recdNvUQWkLmgP5Nm', headers=headers, data=data)
-
-data = '{  "fields": {    "Name": "p10",    "Rank": "'+str(int(r[9]))+'",     "League": "Silver"  }}' # how to use a variable instead of a number in this?
-
-response = requests.patch('https://api.airtable.com/v0/appsdIexEprfXeowP/Ranks/recaY6psMCOtDincQ', headers=headers, data=data)
+  updateData(r, headers, data)

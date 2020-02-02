@@ -1,8 +1,12 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template 
 import requests
 import json
+import ranking
+import math
+#import pdb; pdb.set_trace() -  for debugging purposes, uncomment and setup the pdb trace
 headers = {
-    'Authorization': 'Bearer -'
+    'Authorization': 'Bearer -',
+    'Content-Type': 'application/json'
 }
 
 app = Flask(__name__)
@@ -22,7 +26,7 @@ def hello():
 
   for x in range(10):
       lst[x]['rank'] = int(lst[x]['rank'])
-   # import pdb; pdb.set_trace()
+
   i = 0
   for i in range(10):
         place = lst[i]['rank']
@@ -40,6 +44,23 @@ def hello():
 
 
   return render_template('index.html', rankings = lst)
+
+# Adding a method for collecting user input from a button and running ranking.py with the winning team and the margin of victory
+@app.route('/', methods=["POST"])
+def collect_input():
+    # Which team won? a or b
+    team = str(request.form.get('winTeam'))
+    # What was the margin of victory? (points)
+    margin = request.form.get('ptMargin')
+
+    data = '{  "fields": {    "Line": "game",    "Winner": "'+str(team)+'",    "Margin": "'+margin+'"  }}'
+
+    response = requests.patch('https://api.airtable.com/v0/appsNudrABvFaxxaK/Table%201/recDEK6yhvYIDHAqk', headers=headers, data=data)
+
+    if response.status_code == 200: # 200 is success code    
+      ranking.main()
+
+    return hello()
 
 if __name__ == '__main__':
   app.run(debug=True, port=5000)
