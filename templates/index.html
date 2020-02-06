@@ -2,10 +2,16 @@
 
 {% block content %}
 
+<h1 style="text-align:center">  Rankings  </h1>
+
 {% for ranking in rankings %}
-<div style="display: flex;width:100px;text-align:center;border-collapse: collapse;margin-left: auto;margin-right: auto; margin-top: auto ">
+<!-- Putting anything inside here will be repeated due to the for loop -->
+<div style="display: flex;width:175px;text-align:center;border-collapse: collapse;margin-left: auto;margin-right: auto; margin-top: auto ">
   <p style="border: 1px solid black; padding: 10px;"">
     {{ranking['rank']}}
+  </p>
+  <p style="margin-left: 0px;border:1px solid black; padding: 10px;border-left:0;">
+    {{ranking['league']}}
   </p>
   <p style="margin-left: 0px;border:1px solid black; padding: 10px;border-left:0;">
     {{ranking['name']}}
@@ -14,17 +20,17 @@
 {% endfor %}
 
 <!-- Adding a form to collect user input for the ranking.py "team a or b" and "margin of victory" input args -->
-<form name="message" method="post">
+<form name="message" method="post" style="text-align:center">
   <section>
 
 <div style="float:center;margin-right:20px;">
   <label for="winTeam">Winning Team</label>
-  <input id="winTeam" type="text" value="" name="winTeam">
+  <input id="winTeam" type="text" value="" name="winTeam" minlength="1" maxlength="1" pattern="[A-Ba-b]" placeholder="a or b">
 </div>
 
 <div style="float:center;">
   <label for="ptMargin">Margin of Victory</label>
-  <input id="ptMargin" type="text" value="" name="ptMargin">
+  <input id="ptMargin" type="number" value="" name="ptMargin" min="2" max="15" placeholder="2 - 15">
 </div>
 
 <br style="clear:both;" />

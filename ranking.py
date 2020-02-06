@@ -103,46 +103,44 @@ def SpreadFinder(Pa, Pb):
     spread = 15
   return spread
 
-# Ra and Rb are current ELO ratings 
-
-def updateData(r, headers, data):
-  data = '{  "fields": {    "Name": "p1",    "Rank": "'+str(int(r[0]))+'",     "League": "Gold"  }}' # how to use a variable instead of a number in this?
+def updateData(r, lgs, headers, data):
+  data = '{  "fields": {    "Name": "p1",    "Rank": "'+str(int(r[0]))+'",     "League": "'+str(lgs[0])+'"  }}'
 
   response = requests.patch('https://api.airtable.com/v0/appsdIexEprfXeowP/Ranks/recP0Ug7CltqlaONR', headers=headers, data=data)
 
-  data = '{  "fields": {    "Name": "p2",    "Rank": "'+str(int(r[1]))+'",     "League": "Silver"  }}' # how to use a variable instead of a number in this?
+  data = '{  "fields": {    "Name": "p2",    "Rank": "'+str(int(r[1]))+'",     "League": "'+str(lgs[1])+'"  }}'
 
   response = requests.patch('https://api.airtable.com/v0/appsdIexEprfXeowP/Ranks/recZ6QZ7Mp3AjYU83', headers=headers, data=data)
 
-  data = '{  "fields": {    "Name": "p3",    "Rank": "'+str(int(r[2]))+'",     "League": "Silver"  }}' # how to use a variable instead of a number in this?
+  data = '{  "fields": {    "Name": "p3",    "Rank": "'+str(int(r[2]))+'",     "League": "'+str(lgs[2])+'"  }}'
 
   response = requests.patch('https://api.airtable.com/v0/appsdIexEprfXeowP/Ranks/recWdoxMgJOpL3vXq', headers=headers, data=data)
 
-  data = '{  "fields": {    "Name": "p4",    "Rank": "'+str(int(r[3]))+'",     "League": "Silver"  }}' # how to use a variable instead of a number in this?
+  data = '{  "fields": {    "Name": "p4",    "Rank": "'+str(int(r[3]))+'",     "League": "'+str(lgs[3])+'"  }}'
 
   response = requests.patch('https://api.airtable.com/v0/appsdIexEprfXeowP/Ranks/recjFJxsdctwgxwir', headers=headers, data=data)
 
-  data = '{  "fields": {    "Name": "p5",    "Rank": "'+str(int(r[4]))+'",     "League": "Silver"  }}' # how to use a variable instead of a number in this?
+  data = '{  "fields": {    "Name": "p5",    "Rank": "'+str(int(r[4]))+'",     "League": "'+str(lgs[4])+'"  }}'
 
   response = requests.patch('https://api.airtable.com/v0/appsdIexEprfXeowP/Ranks/rec2e413CzY4xw3vw', headers=headers, data=data)
 
-  data = '{  "fields": {    "Name": "p6",    "Rank": "'+str(int(r[5]))+'",     "League": "Silver"  }}' # how to use a variable instead of a number in this?
+  data = '{  "fields": {    "Name": "p6",    "Rank": "'+str(int(r[5]))+'",     "League": "'+str(lgs[5])+'"  }}'
 
   response = requests.patch('https://api.airtable.com/v0/appsdIexEprfXeowP/Ranks/rec7IhazJHbxGpYJl', headers=headers, data=data)
 
-  data = '{  "fields": {    "Name": "p7",    "Rank": "'+str(int(r[6]))+'",     "League": "Silver"  }}' # how to use a variable instead of a number in this?
+  data = '{  "fields": {    "Name": "p7",    "Rank": "'+str(int(r[6]))+'",     "League": "'+str(lgs[6])+'"  }}'
 
   response = requests.patch('https://api.airtable.com/v0/appsdIexEprfXeowP/Ranks/recbrE7TS6zczLO20', headers=headers, data=data)
 
-  data = '{  "fields": {    "Name": "p8",    "Rank": "'+str(int(r[7]))+'",     "League": "Silver"  }}' # how to use a variable instead of a number in this?
+  data = '{  "fields": {    "Name": "p8",    "Rank": "'+str(int(r[7]))+'",     "League": "'+str(lgs[7])+'"  }}'
 
   response = requests.patch('https://api.airtable.com/v0/appsdIexEprfXeowP/Ranks/rec0XUKNGhIJeragY', headers=headers, data=data)
 
-  data = '{  "fields": {    "Name": "p9",    "Rank": "'+str(int(r[8]))+'",     "League": "Silver"  }}' # how to use a variable instead of a number in this?
+  data = '{  "fields": {    "Name": "p9",    "Rank": "'+str(int(r[8]))+'",     "League": "'+str(lgs[8])+'"  }}'
 
   response = requests.patch('https://api.airtable.com/v0/appsdIexEprfXeowP/Ranks/recdNvUQWkLmgP5Nm', headers=headers, data=data)
 
-  data = '{  "fields": {    "Name": "p10",    "Rank": "'+str(int(r[9]))+'",     "League": "Silver"  }}' # how to use a variable instead of a number in this?
+  data = '{  "fields": {    "Name": "p10",    "Rank": "'+str(int(r[9]))+'",     "League": "'+str(lgs[9])+'"  }}'
 
   response = requests.patch('https://api.airtable.com/v0/appsdIexEprfXeowP/Ranks/recaY6psMCOtDincQ', headers=headers, data=data)
 
@@ -153,7 +151,7 @@ def main():
   lst = []
   
   for item in items['records']:
-    lst.append({'rank': item['fields']['Rank'], 'name': item['fields']['Name']})
+    lst.append({'rank': item['fields']['Rank'], 'name': item['fields']['Name'], 'league': item['fields']['League']})
 
   #print("Enter the ratings of each of the players. Team A: ")
   i = 0
@@ -185,6 +183,7 @@ def main():
   margin = int(lst1[0]['margin'])
 
   # Average ratings of each team, a/b - also finds difference in the ratings
+  # Ra and Rb are current ELO ratings for each team - a and b, respectively
   Ra = Average(r[0], r[1], r[2], r[3], r[4])
   Rb = Average(r[5], r[6], r[7], r[8], r[9])
   diff = round(EloRating(Ra, Rb, aWin, margin))
@@ -201,12 +200,28 @@ def main():
   r[8] -= diff
   r[9] -= diff
 
+  # Assign a league to each player based on ranking range
+  lgs = []
+  for z in range(len(r)):
+    if(r[z] < 1300):
+      lgs.append("Bronze")
+    elif(r[z] < 1400):
+      lgs.append("Silver")
+    elif(r[z] < 1500):
+      lgs.append("Gold")
+    elif(r[z] < 1600):
+      lgs.append("Diamond")
+    elif(r[z] < 1700):
+      lgs.append("Platinum")
+    else:
+      lgs.append("Grand Champ")
+
   print("Updated Ratings:")
   print("Team A below:     Team B below: ")   
-  print("P1 =", str(r[0]), " P6 =", str(r[5]))
-  print("P2 =", str(r[1])," P7 =", str(r[6]))
-  print("P3 =", str(r[2])," P8 =", str(r[7]))
-  print("P4 =", str(r[3])," P9 =", str(r[8]))
-  print("P5 =", str(r[4])," P10 =", str(r[9])) 
+  print("P1 =", str(r[0]), lgs[0], " P6 =", str(r[5]), lgs[5], )
+  print("P2 =", str(r[1]), lgs[1], " P7 =", str(r[6]), lgs[6], )
+  print("P3 =", str(r[2]), lgs[2], " P8 =", str(r[7]), lgs[7], )
+  print("P4 =", str(r[3]), lgs[3], " P9 =", str(r[8]), lgs[8], )
+  print("P5 =", str(r[4]), lgs[4], " P10 =", str(r[9]), lgs[9], ) 
 
-  updateData(r, headers, data)
+  updateData(r, lgs, headers, data)

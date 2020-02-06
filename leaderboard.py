@@ -19,28 +19,30 @@ def hello():
   
 
   for item in items['records']:
-    lst.append({'rank': item['fields']['Rank'], 'name': item['fields']['Name']})
-    # , 'league': item['fields']['League']
-    #print(item['fields']['Rank'])
-    #print(item['fields']['Name'])
+    lst.append({'rank': item['fields']['Rank'], 'name': item['fields']['Name'], 'league': item['fields']['League']})
 
   for x in range(10):
+      #import pdb; pdb.set_trace()
       lst[x]['rank'] = int(lst[x]['rank'])
+      lst[x]['league'] = str(lst[x]['league'])
 
   i = 0
   for i in range(10):
         place = lst[i]['rank']
         person = lst[i]['name']
+        league = lst[i]['league']
         pos = i
         
         while pos > 0 and lst[pos - 1]['rank'] < place:
             # Swap the number down the list
             lst[pos]['rank'] = lst[pos - 1]['rank']
             lst[pos]['name'] = lst[pos - 1]['name']
+            lst[pos]['league'] = lst[pos - 1]['league']
             pos = pos - 1
         # Break and do the final swap
         lst[pos]['rank'] = place
         lst[pos]['name'] = person
+        lst[pos]['league'] = league
 
 
   return render_template('index.html', rankings = lst)
